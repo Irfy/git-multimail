@@ -1090,6 +1090,7 @@ class Revision(Change):
         values['newrev'] = self.rev.sha1
         values['short_refname'] = self.reference_change.short_refname
         values['refname_type'] = self.reference_change.refname_type
+        values['refname_type_as_label'] = self.reference_change.refname_type.title() + ':'
         values['reply_to_msgid'] = self.reference_change.msgid
         values['num'] = self.num
         values['tot'] = self.tot
@@ -1267,6 +1268,7 @@ class ReferenceChange(Change):
 
         values['change_type'] = self.change_type
         values['refname_type'] = self.refname_type
+        values['refname_type_as_label'] = self.refname_type.title() + ':'
         values['refname'] = self.refname
         values['short_refname'] = self.short_refname
         values['msgid'] = self.msgid
