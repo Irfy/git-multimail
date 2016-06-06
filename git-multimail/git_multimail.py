@@ -1137,14 +1137,21 @@ class Revision(Change):
     def generate_email_body(self, push):
         """Show this revision."""
 
+        diff_label_printed = False
         for line in read_git_lines(
                 ['log'] + self.environment.commitlogopts + ['-1', self.rev.sha1],
                 keepends=True,
                 errors='replace'):
             if line.startswith('Date:   ') and self.environment.date_substitute:
-                yield self.environment.date_substitute + line[len('Date:   '):]
-            else:
-                yield line
+                line = self.environment.date_substitute + line[len('Date:   '):]
+            elif line == '---\n':
+                continue
+            elif line.startswith('diff --git'):
+                if not diff_label_printed:
+                    diff_label_printed = True
+                    yield 'Diffs:\n'
+                    yield '\n'
+            yield line
 
     def generate_email_footer(self, html_escape_val):
         return self.expand_lines(REVISION_FOOTER_TEMPLATE,
